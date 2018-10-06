@@ -4,7 +4,7 @@
   <span>My Application</span>
 </mat-toolbar>
 <div class="mat-app-background">
-<div class="body">
-<app-login></app-login>
-</div>
+  <div class="body">
+    <app-login *ngIf="!loggedIn" [userSession]="userSession"></app-login>
+  </div>
 </div>
