@@ -1,0 +1,8 @@
+APP = {
+    "cobrandId": <int>,
+    "applicationId": "<string>",
+    "locale": "en_US",
+    "session": {
+        "cobSession": "<string>"
+    }
+} 
