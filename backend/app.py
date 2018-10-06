@@ -4,8 +4,13 @@ from config import APP as config
 import json
 from sqlalchemy.sql import select, delete
 from models import model as M
+from pymongo import MongoClient
+from flask_cors import CORS
+
+client = MongoClient('mongodb://localhost:27017')
 
 app = Flask(__name__)
+CORS(app)
 
 DEFAULT_HEADERS = {
     "Api-Version": "1.1",

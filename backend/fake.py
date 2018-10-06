@@ -1,6 +1,7 @@
 import json
 import random
 import copy
+import numpy as np
 
 class Faker:
 
@@ -14,7 +15,7 @@ class Faker:
         for _ in range(self.transaction_count):
             new_transaction = copy.deepcopy(transaction_json_dict['transaction'][-1])
             previous_transaction = transaction_json_dict['transaction'][-1]
-            new_transaction['amount']['amount'] = random.randint(100,10000)
+            new_transaction['amount']['amount'] = np.random.normal(loc=5000, scale=500)
             category_type = random.choice(['EXPENSE', 'INCOME'])
             new_transaction['categoryType'] = category_type
             if category_type == 'EXPENSE':
@@ -36,8 +37,8 @@ class Faker:
         holding_json_dict = json.loads(holding_json_string)
         for _ in range(self.holding_count):
             new_holding = copy.deepcopy(holding_json_dict['holding'][-1])
-            holding_amount = random.randint(10,150)
-            holding_quantity = random.randint(10, 100)
+            holding_amount = np.random.normal(loc=75, scale=30)
+            holding_quantity = np.random.normal(loc=50, scale=20)
             new_holding['costBasis']['amount'] = holding_amount
             new_holding['price']['amount'] = holding_amount
             new_holding['quantity'] = holding_quantity
