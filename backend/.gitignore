@@ -2,3 +2,4 @@ venv
 ENV
 __pycache__
 .pyc
+config.py
