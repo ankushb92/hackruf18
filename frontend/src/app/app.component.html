@@ -2,6 +2,13 @@
 
 <mat-toolbar color="primary">
   <span>My Application</span>
+  <span class="fill-remaining-space"></span>
+  <button mat-button class="menu_icon" *ngIf="loggedIn"
+          [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>Settings</button>
+    <button mat-menu-item>Logout</button>
+  </mat-menu>
 </mat-toolbar>
 <div class="mat-app-background">
   <div class="body">

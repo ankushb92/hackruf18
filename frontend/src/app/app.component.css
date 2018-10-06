@@ -5,3 +5,11 @@
   margin-bottom: 30px;
   min-height: 100%;
 }
+.fill-remaining-space {
+  flex: 1 1 auto;
+}
+
+.menu_icon {
+  min-width: 0;
+  padding: 0;
+}
