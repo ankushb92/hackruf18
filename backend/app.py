@@ -1,8 +1,8 @@
 from flask import Flask, request, jsonify
 import requests as req
-import config
+from config import APP as config
 import json
-from sqlalchemy.sql import select
+from sqlalchemy.sql import select, delete
 from models import model as M
 
 app = Flask(__name__)
@@ -10,9 +10,14 @@ app = Flask(__name__)
 DEFAULT_HEADERS = {
     "Api-Version": "1.1",
     "Cobrand-Name": "restserver",
-    "Authorization": "{cobSession=08062013_0:0ba7db6e6573371cfbb45af7cd97c81837feab68d4ca2fcddb04bdaf8e966ad6dc264348831bbd091acbb32d3e1b0fce8669b548c91dd4ee7c407d657a174736}",
+    "Authorization": "{cobSession=%s}" % config['session']['cobSession'],
     "Content-Type": "application/json"
 }
+
+def include_session(s):
+    auth_header = {'Authorization':  "{cobSession=%s,userSession=%s}" % (config['session']['cobSession'], s)}
+    return {**DEFAULT_HEADERS, **auth_header}
+
 @app.route('/ping')
 def pong():
     return jsonify({'message': 'Pong'})
@@ -42,4 +47,15 @@ def login():
         s.commit()
         return jsonify({'session': rjson['session']['userSession']})
 
+@app.route('/logout', methods=['POST'])
+def logout():
+    usersession = request.headers.get('session')
+    print("HEADERS", include_session(usersession))
+    r = req.post('https://developer.api.yodlee.com:443/ysl/user/logout',
+        headers=include_session(usersession))
+    if r.status_code == 204:
+        s = M.Session()
+        s.execute(M.User.__table__.delete().where(M.User.__table__.c.session==usersession))
+        s.commit()
+        return jsonify({"message": "Logged out"})
 app.run(debug=True)
