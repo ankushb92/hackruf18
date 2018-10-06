@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import requests as req
 import config
 import json
+from sqlalchemy.sql import select
 from models import model as M
 
 app = Flask(__name__)
@@ -32,6 +33,10 @@ def login():
     if r.status_code == 200:
         rjson = r.json()['user']
         s = M.Session()
+        query = select([M.User.__table__.c.session]).where(M.User.__table__.c.id==rjson['id'])
+        us = s.execute(query).fetchone()
+        if us:
+            return jsonify({'session': us[0]})
         u = M.User(id=rjson['id'], loginName=rjson['loginName'], name="%s %s" % (rjson['name']['first'], rjson['name']['first']), roleType=rjson['roleType'], session=rjson['session']['userSession'])
         s.add(u)
         s.commit()
