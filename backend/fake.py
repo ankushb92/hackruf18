@@ -36,7 +36,7 @@ class Faker:
                 running_balance = previous_transaction['runningBalance']['amount'] + new_transaction['amount']['amount']
             new_transaction['runningBalance']['amount'] = running_balance
             transaction_json_dict['transaction'].append(new_transaction)
-        return json.dumps(transaction_json_dict)
+        return transaction_json_dict
 
 
 
@@ -52,9 +52,4 @@ class Faker:
             new_holding['quantity'] = holding_quantity
             new_holding['value']['amount'] = holding_quantity * holding_amount
             holding_json_dict['holding'].append(new_holding)
-        return json.dumps(holding_json_dict)
-
-
-f = Faker()
-print(f.fake_holdings())
-
+        return holding_json_dict

@@ -2,16 +2,28 @@ from flask import Flask, request, jsonify
 import requests as req
 from config import APP as config
 import json
-from sqlalchemy.sql import select, delete
-from models import model as M
 from pymongo import MongoClient
+import random
 from flask_cors import CORS
+from fake import Faker
 
 client = MongoClient('mongodb://localhost:27017')
+db = client['monies']
+users = db['users']
+transactions = db['transactions']
+holdings = db['holdings']
 
 app = Flask(__name__)
 CORS(app)
 
+def commit_fraud(uid, tcount=0, hcount=0):
+    print("Committing Fraud")
+    tcount = tcount if tcount > 0 else random.randint(30, 100)
+    hcount = hcount if hcount > 0 else random.randint(5, 50)
+    f = Faker(tcount, hcount)
+    transactions.insert_one({**{'_id': uid}, **f.fake_transaction_history()})
+    holdings.insert_one({**{'_id': uid}, **f.fake_holdings()})
+    
 DEFAULT_HEADERS = {
     "Api-Version": "1.1",
     "Cobrand-Name": "restserver",
@@ -40,17 +52,35 @@ def login():
     }
     r = req.post('https://developer.api.yodlee.com:443/ysl/user/login',
         data=json.dumps(user_creds), headers=DEFAULT_HEADERS)
+    print("LOGIN", r.json()['user'])
     if r.status_code == 200:
         rjson = r.json()['user']
-        s = M.Session()
-        query = select([M.User.__table__.c.session]).where(M.User.__table__.c.id==rjson['id'])
-        us = s.execute(query).fetchone()
-        if us:
-            return jsonify({'session': us[0]})
-        u = M.User(id=rjson['id'], loginName=rjson['loginName'], name="%s %s" % (rjson['name']['first'], rjson['name']['first']), roleType=rjson['roleType'], session=rjson['session']['userSession'])
-        s.add(u)
-        s.commit()
-        return jsonify({'session': rjson['session']['userSession']})
+        if not list(transactions.find({"_id": rjson['id']})):
+            commit_fraud(rjson['id'])
+        if list(users.find({'_id': rjson['id']}).limit(1)):
+            users.remove({'_id': rjson['id']})
+        rjson['_id'] = rjson.pop('id')
+        print("RSJON", rjson)
+        users.insert_one(rjson)
+        return jsonify(rjson)
+
+@app.route('/transactions', methods=['GET'])
+def get_transactions():
+    session = request.headers.get("session")
+    try:
+        uid = list(users.find({'session.userSession': session}, {'_id': 1}))[0]['_id']
+        return jsonify(list(transactions.find({'_id': uid}, {'transaction': 1, '_id': 0}).limit(1))[0])
+    except IndexError:
+        return jsonify({"message": "Invalid user session"}), 400
+
+@app.route('/holdings', methods=['GET'])
+def get_holdings():
+    session = request.headers.get('session')
+    try:
+        uid = list(users.find({'session.userSession': session}, {'_id': 1}))[0]['_id']
+        return jsonify(list(transactions.find({'_id': uid}, {'holding': 1, '_id': 0}).limit(1))[0])
+    except IndexError:
+        return jsonify({"message": "Invalid user session token"}), 400
 
 @app.route('/logout', methods=['POST'])
 def logout():
@@ -59,8 +89,7 @@ def logout():
     r = req.post('https://developer.api.yodlee.com:443/ysl/user/logout',
         headers=include_session(usersession))
     if r.status_code == 204:
-        s = M.Session()
-        s.execute(M.User.__table__.delete().where(M.User.__table__.c.session==usersession))
-        s.commit()
+        users.remove({'session.userSession': usersession})
         return jsonify({"message": "Logged out"})
+    return jsonify({"message": "no"}), 404
 app.run(debug=True)
