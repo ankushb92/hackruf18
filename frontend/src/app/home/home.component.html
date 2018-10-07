@@ -1,22 +1,17 @@
 <div class="body">
   <mat-accordion>
 
-    <mat-expansion-panel [hideToggle]="true">
+    <mat-expansion-panel [hideToggle]="true" *ngFor="let acc of accounts">
       <mat-expansion-panel-header >
-        Bank of America <span class="fill-remaining-space"></span>
-        <span class="big-size">$1000</span>
+        {{ acc['nickname'] }} <span class="fill-remaining-space"></span>
+        <span class="big-size">$ {{ acc['balance']['amount'] }}</span>
       </mat-expansion-panel-header>
 
-      This the expansion 1 content
-
-    </mat-expansion-panel>
-
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        Chase
-      </mat-expansion-panel-header>
-
-      This the expansion 2 content
+      <div class="flexer">{{ acc['accountName'] }} <span
+        class="small-font">({{ acc['accountNumber'] }})
+      </span><span
+        class="fill-remaining-space"></span><mat-icon
+        color="accent">check_circle</mat-icon></div>
 
     </mat-expansion-panel>
 

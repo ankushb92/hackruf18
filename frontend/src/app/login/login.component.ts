@@ -16,8 +16,8 @@ export class LoginComponent implements OnInit {
   @Output() loggedInChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Input() userChange: EventEmitter<object> = new EventEmitter<object>();
 
-  public username: string = "sbMemd7b5f5124626746c0765654ebe2c85048a5";
-  public password: string = "sbMemd7b5f5124626746c0765654ebe2c85048a5#123";
+  public username: string = "sbMemd7b5f5124626746c0765654ebe2c85048a1";
+  public password: string = "sbMemd7b5f5124626746c0765654ebe2c85048a1#123";
 
   constructor(public service: LoginService, public snackBar: MatSnackBar) { }
 
