@@ -1,3 +1,14 @@
-<p>
-  home works!
-</p>
+here
+<div class="body" *ngFor="let element of array">
+    <mat-card>
+        <div class="card-row">
+            {{element['description']}}
+            <span class="fill-remaining-space"></span>
+            {{element['quantity']}}
+        </div>
+
+        <div class="card-row small-font">
+            {{element['quantity']}} holdings at ${{element['price']['amount']}} per holding = ${{element['value']['amount']}}
+        </div>
+    </mat-card>
+</div>
