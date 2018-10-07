@@ -2,18 +2,18 @@ import json
 import random
 import copy
 import numpy as np
+import datetime
 
 banks = [
-    'First National Bank of the United States',
+    'Bank of China',
     'Toronto-Dominion Bank',
     'Credit Suisse',
     'Deutsch Bank',
     'Royal Bank of Canada',
-    'Chase',
+    'JP Morgan & Chase',
     'BNY Mellon',
-    'Well Fargo'
 ]
-    '
+
 class Faker:
 
     def __init__(self, user_type=1):
@@ -73,11 +73,17 @@ class Faker:
         transaction_json_string = '{"transaction":[{"CONTAINER":"bank","id":2829798,"amount":{"amount":0,"currency":"USD"},"runningBalance":{"amount":' +  str(np.random.normal(loc=self.balance_mean, scale=self.balance_var)) + ',"currency":"USD"},"baseType":"DEBIT","categoryType":"INCOME","categoryId":17,"category":"Loans","categorySource":"SYSTEM","highLevelCategoryId":10000004,"date":"2014-07-01","createdDate":"2014-07-01T13:42:35Z","lastUpdated":"2014-07-01T13:42:35Z","postDate":"2014-07-01","description":{"original":"ACH Withdrawal-Debit XXXXXXXX00 - PPD US BANK - LOAN A BILL PAYMT","consumer":"My Loan Payment","simple":"U.S. Bank Loan"},"isManual":false,"status":"POSTED","accountId":836726,"type":"PAYMENT","subType":"LOAN","merchant":{"id":"u.s.bank","source":"FACTUAL","name":"U.S. Bank","categoryLabel":["Loans"],"address":{"address1":"4160 Mission St","city":"San Francisco","state":"CA","country":"USA","zip":94112}}}]}'
         transaction_json_dict = json.loads(transaction_json_string)
         transaction_count = int(np.random.normal(loc=self.transaction_count_mean, scale=self.transaction_count_var))
+        date = None
+        def new_date(date):
+            return date + datetime.timedelta(random.randint(5, 20), random.randint(6000, 12000)) if date else datetime.datetime(2012, 1, 1)
         for _ in range(transaction_count):
             new_transaction = copy.deepcopy(transaction_json_dict['transaction'][-1])
             previous_transaction = transaction_json_dict['transaction'][-1]
             category_type = random.choice(['EXPENSE', 'INCOME'])
             new_transaction['categoryType'] = category_type
+            new_transaction['description']['simple'] = random.choice(banks)
+            date = new_date(date)
+            new_transaction['date'] = new_transaction['createdDate'] = new_transaction['lastUpdated'] = new_transaction['postDate'] = date
             if category_type == 'EXPENSE':
                 new_transaction['amount']['amount'] = np.random.normal(loc=self.debit_mean, scale=self.debit_var)
                 running_balance = previous_transaction['runningBalance']['amount'] - new_transaction['amount']['amount']
