@@ -95,7 +95,7 @@ def login():
         users.insert_one(rjson)
         return jsonify(rjson)
 
-@app.route('/user/update', methods=['PUT'])
+@app.route('/user/update', methods=['PUT', 'POST'])
 def update_user():
     uid = get_id_from_session(request.headers.get('session'))
     if not uid:
@@ -107,9 +107,7 @@ def update_user():
     if 'dob' in request.data: 
         request.data['dob'] = str(parser.parse(request.data['dob']))
     users.update_one({'_id': uid}, {'$set': request.data})
-    resp = make_response()
-    resp.status_code = 200
-    return resp
+    return {"message": "lit"}, 200
 
 @app.route('/transactions', methods=['GET'])
 def get_transactions():
