@@ -127,6 +127,7 @@ def get_transactions():
         if 'tnonly' in request.args:
             transaction_results['transaction'] = [{'p': t['runningBalance']['amount'], 'tt': t['date']} \
                 for t in transaction_results['transaction']]
+        transaction_results['transaction'] = transaction_results['transaction'][-20:]
         return jsonify(transaction_results), 200
     except IndexError:
         return jsonify({"message": "Invalid user session"}), 400
@@ -144,6 +145,7 @@ def get_holdings():
                 sum_ += hold['value']['amount']
                 new_holding.append({'idx': i, 'sum': sum_})
             holding_data['holding'] = new_holding
+        holding_data['holding'] = holding_data[-20:]
         return jsonify(holding_data)
     except IndexError:
         return jsonify({"message": "Invalid user session token"}), 400
@@ -155,6 +157,7 @@ def get_accounts():
         if len(list(users.find({'session.userSession': session}, {'_id': 1}))) > 0:
             r = req.get('https://developer.api.yodlee.com:443/ysl/accounts', headers=include_session(session))
             return jsonify(r.json()), 200
+        return jsonify({"message": "Invalid user session token"}), 400
     except IndexError:
         return jsonify({"message": "Invalid user session token"}), 400
 
@@ -181,4 +184,4 @@ def analyze_portfolio():
     recommendation =r.get_recommendation()
     return jsonify({'fitness': pv[0], 'recommendation': recommendation[0], 'link': recommendation[1]})
 
-app.run(debug=True)
+app.run(host='0.0.0.0', port=5000)
