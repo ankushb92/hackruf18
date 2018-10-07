@@ -5,9 +5,17 @@ import numpy as np
 
 class Faker:
 
-    def __init__(self, transaction_count=100, holding_count=100):
+    def __init__(self, transaction_count=100, holding_count=100, user_type=1):
         self.transaction_count = transaction_count
         self.holding_count = holding_count
+        self.user_type = user_type #1 is low age, high risk guy, 2 is mid age mid risk guy, 3 is high age low risk guy
+        if self.user_type == 1:
+            pass
+        else if self.user_type == 2:
+            self.age_mean = 40
+            self.age_var = 7
+        else if self.user_type == 3:
+            pass
 
     def fake_transaction_history(self):
         transaction_json_string = '{"transaction":[{"CONTAINER":"bank","id":2829798,"amount":{"amount":1000,"currency":"USD"},"runningBalance":{"amount":1000,"currency":"USD"},"baseType":"DEBIT","categoryType":"INCOME","categoryId":17,"category":"Loans","categorySource":"SYSTEM","highLevelCategoryId":10000004,"date":"2014-07-01","createdDate":"2014-07-01T13:42:35Z","lastUpdated":"2014-07-01T13:42:35Z","postDate":"2014-07-01","description":{"original":"ACH Withdrawal-Debit XXXXXXXX00 - PPD US BANK - LOAN A BILL PAYMT","consumer":"My Loan Payment","simple":"U.S. Bank Loan"},"isManual":false,"status":"POSTED","accountId":836726,"type":"PAYMENT","subType":"LOAN","merchant":{"id":"u.s.bank","source":"FACTUAL","name":"U.S. Bank","categoryLabel":["Loans"],"address":{"address1":"4160 Mission St","city":"San Francisco","state":"CA","country":"USA","zip":94112}}}]}'
