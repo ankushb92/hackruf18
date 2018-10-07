@@ -130,9 +130,8 @@ def get_holdings():
     session = request.headers.get('session')
     try:
         uid = list(users.find({'session.userSession': session}, {'_id': 1}))[0]['_id']
-        holdings = list(holdings.find({'_id': uid}, {'holding': 1, '_id': 0}).limit(1))[0]
-        print("HOLDINGS", holdings)
-        return jsonify(holdings)
+        holding_data = list(holdings.find({'_id': uid}, {'holding': 1, '_id': 0}).limit(1))[0]
+        return jsonify(holding_data)
     except IndexError:
         return jsonify({"message": "Invalid user session token"}), 400
 
