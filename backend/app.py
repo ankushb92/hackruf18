@@ -125,7 +125,7 @@ def get_transactions():
             {'transaction': 1, '_id': 0}).limit(1))[0]
         transaction_results['transaction'] = list(reversed(transaction_results['transaction']))
         if 'tnonly' in request.args:
-            transaction_results['transaction'] = [{'p': t['amount']['amount'], 'tt': t['date']} \
+            transaction_results['transaction'] = [{'p': t['runningBalance']['amount'], 'tt': t['date']} \
                 for t in transaction_results['transaction']]
         return jsonify(transaction_results), 200
     except IndexError:
