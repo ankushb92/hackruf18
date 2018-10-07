@@ -5,9 +5,7 @@ import numpy as np
 
 class Faker:
 
-    def __init__(self, transaction_count=100, holding_count=100, user_type=1):
-        self.transaction_count = transaction_count
-        self.holding_count = holding_count
+    def __init__(self, user_type=1):
         self.user_type = user_type #1 is low age, high risk guy, 2 is mid age mid risk guy, 3 is high age low risk guy
         if self.user_type == 1:
             self.age_mean = 27
@@ -19,11 +17,14 @@ class Faker:
             self.balance_mean = 50000
             self.balance_var = 20000
             self.is_LRLR = False
-            self.is_lRHR = False
+            self.is_LRHR = False
             self.is_HRLR = False
             self.is_HRHR = True
-            pass
-        else if self.user_type == 2:
+            self.transaction_count_mean = 200
+            self.transaction_count_var = 20
+            self.holding_count_mean = 20
+            self.holding_count_var = 5
+        elif self.user_type == 2:
             self.age_mean = 40
             self.age_var = 7
             self.debit_mean = 200
@@ -36,7 +37,11 @@ class Faker:
             self.is_LRHR = True
             self.is_HRLR = False
             self.is_HRHR = False
-        else if self.user_type == 3:
+            self.transaction_count_mean = 100
+            self.transaction_count_var = 10
+            self.holding_count_mean = 30
+            self.holding_count_var = 5
+        elif self.user_type == 3:
             self.age_mean = 55
             self.age_var = 7
             self.debit_mean = 50
@@ -46,15 +51,18 @@ class Faker:
             self.balance_mean = 500000
             self.balance_var = 200000
             self.is_LRLR = True
-            self.is_lRHR = False
+            self.is_LRHR = False
             self.is_HRLR = False
             self.is_HRHR = False
-            pass
-
+            self.transaction_count_mean = 50
+            self.transaction_count_var = 5
+            self.holding_count_mean = 50
+            self.holding_count_var = 5
     def fake_transaction_history(self):
-        transaction_json_string = '{"transaction":[{"CONTAINER":"bank","id":2829798,"amount":{"amount":0,"currency":"USD"},"runningBalance":{"amount":' +  int(np.random.normal(loc=self.balance_mean, scale=self.balance_var)) + ',"currency":"USD"},"baseType":"DEBIT","categoryType":"INCOME","categoryId":17,"category":"Loans","categorySource":"SYSTEM","highLevelCategoryId":10000004,"date":"2014-07-01","createdDate":"2014-07-01T13:42:35Z","lastUpdated":"2014-07-01T13:42:35Z","postDate":"2014-07-01","description":{"original":"ACH Withdrawal-Debit XXXXXXXX00 - PPD US BANK - LOAN A BILL PAYMT","consumer":"My Loan Payment","simple":"U.S. Bank Loan"},"isManual":false,"status":"POSTED","accountId":836726,"type":"PAYMENT","subType":"LOAN","merchant":{"id":"u.s.bank","source":"FACTUAL","name":"U.S. Bank","categoryLabel":["Loans"],"address":{"address1":"4160 Mission St","city":"San Francisco","state":"CA","country":"USA","zip":94112}}}]}'
+        transaction_json_string = '{"transaction":[{"CONTAINER":"bank","id":2829798,"amount":{"amount":0,"currency":"USD"},"runningBalance":{"amount":' +  str(np.random.normal(loc=self.balance_mean, scale=self.balance_var)) + ',"currency":"USD"},"baseType":"DEBIT","categoryType":"INCOME","categoryId":17,"category":"Loans","categorySource":"SYSTEM","highLevelCategoryId":10000004,"date":"2014-07-01","createdDate":"2014-07-01T13:42:35Z","lastUpdated":"2014-07-01T13:42:35Z","postDate":"2014-07-01","description":{"original":"ACH Withdrawal-Debit XXXXXXXX00 - PPD US BANK - LOAN A BILL PAYMT","consumer":"My Loan Payment","simple":"U.S. Bank Loan"},"isManual":false,"status":"POSTED","accountId":836726,"type":"PAYMENT","subType":"LOAN","merchant":{"id":"u.s.bank","source":"FACTUAL","name":"U.S. Bank","categoryLabel":["Loans"],"address":{"address1":"4160 Mission St","city":"San Francisco","state":"CA","country":"USA","zip":94112}}}]}'
         transaction_json_dict = json.loads(transaction_json_string)
-        for _ in range(self.transaction_count):
+        transaction_count = int(np.random.normal(loc=self.transaction_count_mean, scale=self.transaction_count_var))
+        for _ in range(transaction_count):
             new_transaction = copy.deepcopy(transaction_json_dict['transaction'][-1])
             previous_transaction = transaction_json_dict['transaction'][-1]
             category_type = random.choice(['EXPENSE', 'INCOME'])
@@ -82,7 +90,8 @@ class Faker:
           holding_type = random.choice(["Low Risk Low Reward", "Low Risk High Reward", "High Risk Low Reward", "High Risk High Reward"])
         holding_json_string = '{"holding":[{"id":1347615,"accountId":1111496500,"providerAccountId":12345,"costBasis":{"amount":2500,"currency":"USD"},"cusipNumber":999999999,"securityType":"MUTUAL_FUND","matchStatus":"PUBLIC","description":"IBM stocks","holdingType":"stock","price":{"amount":2500,"currency":"USD"},"quantity":200,"symbol":"IBM","value":{"amount":500000,"currency":"USD"},"assetClassification":[{"classificationType":"Style","classificationValue":"' + holding_type + '","allocation":100},{"classificationType":"Country","classificationValue":"US","allocation":100}]}]}'
         holding_json_dict = json.loads(holding_json_string)
-        for _ in range(self.holding_count):
+        holding_count = int(np.random.normal(loc = self.holding_count_mean, scale = self.holding_count_var)) 
+        for _ in range(holding_count):
             new_holding = copy.deepcopy(holding_json_dict['holding'][-1])
             holding_amount = np.random.normal(loc=75, scale=30)
             holding_quantity = np.random.normal(loc=50, scale=20)
@@ -93,3 +102,16 @@ class Faker:
             new_holding['assetClassification'][0]['classificationValue'] = holding_type
             holding_json_dict['holding'].append(new_holding)
         return holding_json_dict
+
+
+if __name__ == '__main__':
+    num = 100
+    fw = [open('1.json', 'w'), open('2.json', 'w'), open('3.json', 'w')]
+    for i in range(3*num):
+        user = i%3 + 1
+        faker = Faker(user)
+        fw[user-1].write(json.dumps(faker.fake_transaction_history())+'\n')
+        fw[user-1].write(json.dumps(faker.fake_holdings())+'\n')
+    fw[0].close()
+    fw[1].close()
+    fw[2].close()
