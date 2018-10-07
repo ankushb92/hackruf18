@@ -138,7 +138,12 @@ def get_holdings():
         uid = list(users.find({'session.userSession': session}, {'_id': 1}))[0]['_id']
         holding_data = list(holdings.find({'_id': uid}, {'holding': 1, '_id': 0}).limit(1))[0]
         if 'tnonly' in request.args:
-            holding_data['holding'] = [{'p': h['price']['amount'], 'q': h['quantity'], 't': h['securityType']} for h in holding_data['holding']]
+            new_holding = []
+            sum_ = 0
+            for i,hold in enumerate(holding_data['holding']):
+                sum_ += hold['value']['amount']
+                new_holding.append({'idx': i, 'sum': sum_})
+            holding_data['holding'] = new_holding
         return jsonify(holding_data)
     except IndexError:
         return jsonify({"message": "Invalid user session token"}), 400
