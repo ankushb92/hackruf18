@@ -16,15 +16,21 @@ export class ProfileComponent implements OnInit {
   @Input() session: string;
 
   ngOnInit() {
-    console.log(JSON.stringify(this.user));
+    if(this.user==null) this.user=JSON.parse(localStorage.getItem('user'));
   }
 
   updateUserProfile() {
     this.service.updateUserProfile(this.user, this.session).subscribe(
         (data) => {
             console.log(data);
+            this.user=data;
+            if(this.user['dob']!=null) {
+              let date = new Date(this.user['dob']);
+              this.user['dob'] = date;
+            }
+            console.log(this.user);
             this.userChange.emit(this.user);
-            localStorage.setItem('user', JSON.stringify('user'));
+            localStorage.setItem('user', JSON.stringify(data));
         }
     )
   }
