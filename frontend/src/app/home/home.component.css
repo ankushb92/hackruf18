@@ -17,3 +17,6 @@ display:flex;
 .left-space{
 margin-left:10px;
 }
+.holding-name{
+    font-size: 1.2em;
+}

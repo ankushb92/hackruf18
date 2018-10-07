@@ -29,7 +29,9 @@
 <div class="body" *ngFor="let element of array">
     <mat-expansion-panel [hideToggle]="true">
       <mat-expansion-panel-header class="flexer">
-      {{element['description']}}
+          <span class="holding-name">
+              {{element['description']}}
+          </span>
           <mat-chip-list class="left-space">
               <mat-chip color="primary" selected>{{element['quantity'] | number: '1.0-0'}}</mat-chip>
             </mat-chip-list> 
@@ -38,6 +40,16 @@
           <mat-chip color="accent" selected>${{element['price']['amount'] | number: '1.2-2'}}</mat-chip>
         </mat-chip-list>
       </mat-expansion-panel-header>
-      random text_here
+      <div class="holding-info">
+        <em>Quantity Ownned</em> : {{element['quantity'] | number: '1.0-0'}}
+      </div>
+      <div class="holding-info">
+        <em>Per Unit Price</em> : ${{element['price']['amount'] | number: '1.2-2'}}
+      </div>
+
+    <div class="holding-info">
+        <em>Total Value</em> : ${{element['value']['amount'] | number: '1.2-2'}}
+      </div>
+
     </mat-expansion-panel>
 </div>
