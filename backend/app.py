@@ -1,8 +1,9 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 import requests as req
 from config import APP as config
 import json
 from pymongo import MongoClient
+from dateutil import parser
 import random
 from flask_cors import CORS
 from fake import Faker
@@ -100,10 +101,15 @@ def update_user():
     if not uid:
         return jsonify({"message": "bad user session token"}), 400
     user = list(users.find({'_id': uid}).limit(1))[0]
-    allowed_keys = [x.split('.') for x in flatten([['age'], ['name.%s' % n for n in ['first', 'last']],
+    allowed_keys = [x.split('.') for x in flatten([['dob'], ['name.%s' % n for n in ['first', 'last']],
         ['preferences.%s' % p for p in ['currency', 'timeZone']]])]
     request.data = clean_json(allowed_keys, json.loads(request.data), user)
-    return jsonify(request.data)
+    if 'dob' in request.data: 
+        request.data['dob'] = str(parser.parse(request.data['dob']))
+    users.update_one({'_id': uid}, {'$set': request.data})
+    resp = make_response()
+    resp.status_code = 200
+    return resp
 
 @app.route('/transactions', methods=['GET'])
 def get_transactions():
