@@ -16,4 +16,8 @@ constructor(private http: HttpClient) { }
     get_holdings(session){
         return this.http.get(consts.HOLDING_URL, {headers: new HttpHeaders({'session': session})}); 
     }
+
+    get_accounts(session) {
+      return this.http.get(consts.ACCOUNT_URL, {headers: new HttpHeaders({'session': session})});
+    }
 }

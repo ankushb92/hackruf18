@@ -40,11 +40,9 @@ import { HomeComponent } from './home/home.component';
     MatCardModule,
     MatDatepickerModule,
     MatNativeDateModule,
-<<<<<<< HEAD
     MatDividerModule,
     MatChipsModule,
-=======
->>>>>>> temp
+
     MatExpansionModule
   ],
   providers: [],

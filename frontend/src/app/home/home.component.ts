@@ -15,6 +15,8 @@ export class HomeComponent implements OnInit {
       this.service.get_holdings(this.session).subscribe((data)=> {
       this.array = data['holding'];
       });
+
+      this.service.get_accounts(this.session).subscribe((data)=>{console.log(data);});
   }
 
 
