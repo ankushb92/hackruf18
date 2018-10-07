@@ -3,6 +3,7 @@
         <div class="card-row">
             {{element['description']['simple']}}
             <span class="fill-remaining-space"></span>
+            {{(element['categoryType'] == 'EXPENSE') ? '-' : ''}}
             ${{element['amount']['amount'] | number: '1.2-2'}}
         </div>
 
