@@ -1,5 +1,16 @@
-<h3 class="body" *ngIf="array.length > 1"> Balance : {{ array[array.length-1]['amount']['amount'] }} </h3>
-
 <div class="body" *ngFor="let element of array">
-    <mat-card>{{element}}</mat-card>
+    <mat-card>
+        <div class="card-row">
+            {{element['description']['simple']}}
+            <span class="fill-remaining-space"></span>
+            ${{element['amount']['amount'] | number: '1.2-2'}}
+        </div>
+
+        <div class="card-row small-font">
+            {{element['createdDate'] | date: 'mediumDate'}} 
+            <span class="fill-remaining-space"></span>
+            ${{element['runningBalance']['amount'] | number: '1.2-2'}}
+
+        </div>
+    </mat-card>
 </div>
