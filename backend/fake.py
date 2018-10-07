@@ -3,6 +3,17 @@ import random
 import copy
 import numpy as np
 
+banks = [
+    'First National Bank of the United States',
+    'Toronto-Dominion Bank',
+    'Credit Suisse',
+    'Deutsch Bank',
+    'Royal Bank of Canada',
+    'Chase',
+    'BNY Mellon',
+    'Well Fargo'
+]
+    '
 class Faker:
 
     def __init__(self, user_type=1):

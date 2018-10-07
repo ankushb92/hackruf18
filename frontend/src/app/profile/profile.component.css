@@ -1,6 +1,10 @@
 .body div {
     display: flex;
-    flex-flow: column; }
+    flex-flow: column;
+    height: 100%; }
+
+.body {
+    overflow-y: hidden; }
 
 .full-width {
     margin: 10px; }
