@@ -13,15 +13,14 @@ export class ProfileComponent implements OnInit {
   @Output() userChange: EventEmitter<object> = new EventEmitter<object>();
   constructor(public service: ProfileService) { }
   @Input() user: object;
-
+  @Input() session: string;
 
   ngOnInit() {
     console.log(JSON.stringify(this.user));
   }
 
   updateUserProfile() {
-    this.service.updateUser(this.user['name']['first'], this.user['name']['last'],
-    this.user['age'], this.user['preferences']['currency'], this.user['preferences']['timeZone']).subscribe(
+    this.service.updateUserProfile(this.user, this.session).subscribe(
         (data) => {
             console.log(data);
         }

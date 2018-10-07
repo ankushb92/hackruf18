@@ -13,7 +13,8 @@
         <mat-hint>Your Last Name</mat-hint>
     </mat-form-field>
   <mat-form-field class='full-width'>
-    <input matInput [matDatepicker]="picker" placeholder="Date of Birth">
+    <input matInput [matDatepicker]="picker" placeholder="Date of Birth"
+           [(ngModel)]="user['dob']">
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
@@ -30,5 +31,6 @@
                [(ngModel)]="user['preferences']['timeZone']">
         <mat-hint>Your Preferred Time Zone</mat-hint>
     </mat-form-field>
-    <button mat-raised-button color='primary'>Update Profile</button>
+    <button mat-raised-button color='primary' (click)="updateUserProfile()" >Update
+      Profile</button>
 </div>

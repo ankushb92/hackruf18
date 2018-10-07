@@ -21,5 +21,6 @@
                [(loggedIn)]="loggedIn" [(user)]="user"></app-login>
     <app-root *ngIf="loggedIn && !profile" [(userSession)]="userSession"
               [(user)]="user"></app-root>
-    <app-profile *ngIf="loggedIn && profile" [(user)]="user"></app-profile>
+    <app-profile *ngIf="loggedIn && profile" [(user)]="user"
+                 [(session)]="userSession"></app-profile>
 </div>
