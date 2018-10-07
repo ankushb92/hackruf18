@@ -1,3 +1,22 @@
+<h5 style="margin:15px">Transactions</h5>
+
+<ngx-charts-gauge style="display: block"
+  [view]="view"
+  [scheme]="colorScheme"
+  [results]="fitness"
+  [min]="0"
+  [max]="100"
+  [angleSpan]="240"
+  [startAngle]="-120"
+  [units]="'Points'"
+  [bigSegments]="4"
+  (select)="onSelect($event)">
+</ngx-charts-gauge>
+
+<a [href]="data['recommendation'][1]" style="margin:15px; min-width: 100%"
+   mat-raised-button
+   color="primary">View
+  Recommendation Portfolio</a>
 <p>
-  wellness works!
+    {{ data['recommendation'][0] }}
 </p>

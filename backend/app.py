@@ -124,6 +124,9 @@ def get_transactions():
         transaction_results = list(transactions.find({'_id': uid},
             {'transaction': 1, '_id': 0}).limit(1))[0]
         transaction_results['transaction'] = list(reversed(transaction_results['transaction']))
+        if 'tnonly' in request.args:
+            transaction_results['transaction'] = [{'p': t['runningBalance']['amount'], 'tt': t['date']} \
+                for t in transaction_results['transaction']]
         return jsonify(transaction_results), 200
     except IndexError:
         return jsonify({"message": "Invalid user session"}), 400
@@ -134,6 +137,13 @@ def get_holdings():
     try:
         uid = list(users.find({'session.userSession': session}, {'_id': 1}))[0]['_id']
         holding_data = list(holdings.find({'_id': uid}, {'holding': 1, '_id': 0}).limit(1))[0]
+        if 'tnonly' in request.args:
+            new_holding = []
+            sum_ = 0
+            for i,hold in enumerate(holding_data['holding']):
+                sum_ += hold['value']['amount']
+                new_holding.append({'idx': i, 'sum': sum_})
+            holding_data['holding'] = new_holding
         return jsonify(holding_data)
     except IndexError:
         return jsonify({"message": "Invalid user session token"}), 400
@@ -168,6 +178,7 @@ def analyze_portfolio():
         list(holdings.find({'_id': uid}, {'holding': 1, '_id': 0}))[0], 25)
     pv, direction = predict(p.get_neural_net_attrs(), train())
     r = Recommender(direction.tolist())
-    return jsonify({'fitness': pv[0], 'recommendation': r.get_recommendation()})
+    recommendation =r.get_recommendation()
+    return jsonify({'fitness': pv[0], 'recommendation': recommendation[0], 'link': recommendation[1]})
 
 app.run(debug=True)
