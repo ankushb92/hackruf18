@@ -17,6 +17,7 @@ holdings = db['holdings']
 app = Flask(__name__)
 CORS(app)
 
+alphabet = 'qwertyuiopasdfghjklzxcvbnm'
 def commit_fraud(uid):
     f = Faker()
     transactions.insert_one({**{'_id': uid}, **f.fake_transaction_history()})
@@ -89,11 +90,14 @@ def login():
         if not list(transactions.find({"_id": rjson['id']})):
             commit_fraud(rjson['id'])
         if list(users.find({'_id': rjson['id']}).limit(1)):
-            users.remove({'_id': rjson['id']})
-        rjson['_id'] = rjson.pop('id')
-        print("RSJON", rjson)
-        users.insert_one(rjson)
-        return jsonify(rjson)
+            users.update({'_id': rjson['id']},
+                {'$set': {'session.userSession': rjson['session']['userSession']}})
+            return jsonify(list(users.find({'_id': rjson['id']}).limit(1))[0])
+        else:
+            rjson['_id'] = rjson.pop('id')
+            print("RSJON", rjson)
+            users.insert_one(rjson)
+            return jsonify(rjson)
 
 @app.route('/user/update', methods=['PUT', 'POST'])
 def update_user():
@@ -146,7 +150,8 @@ def logout():
     r = req.post('https://developer.api.yodlee.com:443/ysl/user/logout',
         headers=include_session(usersession))
     if r.status_code == 204:
-        users.remove({'session.userSession': usersession})
+        users.update_one({'session.userSession': usersession},
+            {'$set': {'session.userSession': ''.join([random.choice(alphabet) for _ in range(1024)])}})
         return jsonify({"message": "Logged out"})
     return jsonify({"message": "no"}), 404
 
