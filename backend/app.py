@@ -101,7 +101,7 @@ def update_user():
         return jsonify({"message": "bad user session token"}), 400
     user = list(users.find({'_id': uid}).limit(1))[0]
     allowed_keys = [x.split('.') for x in flatten([['age'], ['name.%s' % n for n in ['first', 'last']],
-        ['preferences.%s' % p for p in ['currency', 'timeZone', 'dateFormat', 'locale']]])]
+        ['preferences.%s' % p for p in ['currency', 'timeZone']]])]
     request.data = clean_json(allowed_keys, json.loads(request.data), user)
     return jsonify(request.data)
 
@@ -132,4 +132,5 @@ def logout():
         users.remove({'session.userSession': usersession})
         return jsonify({"message": "Logged out"})
     return jsonify({"message": "no"}), 404
+
 app.run(debug=True)

@@ -1,3 +1,28 @@
-<p>
-  profile works!
-</p>
+<div class='body'>
+<div>
+    <mat-form-field class='full-width'>
+        <mat-label>First Name</mat-label>
+        <input matInput placeholder="Alexander" [(ngModel)]="first">
+        <mat-hint>Your First Name</mat-hint>
+    </mat-form-field>
+    <mat-form-field class='full-width'>
+        <mat-label>Last Name</mat-label>
+        <input matInput placeholder="Hamilton" [(ngModel)]="last">
+        <mat-hint>Your Last Name</mat-hint>
+    </mat-form-field>
+    <mat-form-field class='full-width'>
+        <mat-label>Age</mat-label>
+        <input matInput placeholder="229" [(ngModel)]="age">
+        <mat-hint>Your Age</mat-hint>
+    </mat-form-field>
+    <mat-form-field class='full-width'>
+        <mat-label>Currency Preference</mat-label>
+        <input matInput placeholder="USD" [(ngModel)]="currency">
+        <mat-hint>Your Preferred Currency</mat-hint>
+    </mat-form-field>
+    <mat-form-field class='full-width'>
+        <mat-label>Time Zone</mat-label>
+        <input matInput placeholder="EST" [(ngModel)]="timezone">
+        <mat-hint>Your Preferred Time Zone</mat-hint>
+    </mat-form-field>
+</div>
