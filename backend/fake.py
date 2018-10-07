@@ -5,7 +5,7 @@ import numpy as np
 import datetime
 
 banks = [
-    'First National Bank of the United States',
+    'Bank of China',
     'Toronto-Dominion Bank',
     'Credit Suisse',
     'Deutsch Bank',

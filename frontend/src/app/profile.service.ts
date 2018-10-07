@@ -10,6 +10,5 @@ export class ProfileService {
   constructor(private http: HttpClient) {}
 
   updateUserProfile(first, last, age, currency, timezone) {
-    return this.http.put(consts.UPDATE_USER_URL, {'
   }
 }
