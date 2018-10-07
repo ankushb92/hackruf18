@@ -25,13 +25,13 @@ export class AppComponent implements OnInit{
   }
 
   logout(session: string) {
-    this.service.logout(session).subscribe((data)=> {
+    console.log(session);
+    this.service.logout(session).subscribe((data)=>{} );
       this.userSession=null;
       this.user=null;
       this.loggedIn = false;
       localStorage.removeItem('session');
       localStorage.removeItem('user');
-    });
   }
 
 
