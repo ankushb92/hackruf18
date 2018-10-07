@@ -13,6 +13,8 @@ class User(Base):
     loginName = Column(String)
     roleType = Column(String)
     session = Column(Text)
+    age = Column(Integer)
+    
 
 Base.metadata.create_all(bind=engine)
 Session = sessionmaker(bind=engine)
