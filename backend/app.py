@@ -7,6 +7,8 @@ from dateutil import parser
 import random
 from flask_cors import CORS
 from fake import Faker
+from parse import Parser
+from neural_net import predict, train
 
 client = MongoClient('mongodb://localhost:27017')
 db = client['monies']
@@ -19,7 +21,7 @@ CORS(app)
 
 alphabet = 'qwertyuiopasdfghjklzxcvbnm'
 def commit_fraud(uid):
-    f = Faker()
+    f = Faker(user_type=random.choice([1,2,3]))
     transactions.insert_one({**{'_id': uid}, **f.fake_transaction_history()})
     holdings.insert_one({**{'_id': uid}, **f.fake_holdings()})
     
@@ -156,4 +158,14 @@ def logout():
         return jsonify({"message": "Logged out"})
     return jsonify({"message": "no"}), 404
 
+@app.route('/portfolio', methods=['GET'])
+def analyze_portfolio():
+    uid = get_id_from_session(request.headers.get('session'))
+    if not uid:
+        return jsonify({"message": "Bad session :("}), 400
+    p = Parser(list(transactions.find({'_id': uid}, {'transaction': 1, '_id': 0}))[0],
+        list(holdings.find({'_id': uid}, {'holding': 1, '_id': 0}))[0], 25)
+    pv, direction = predict(p.get_neural_net_attrs(), train())
+    return jsonify({'fitness': pv[0], 'direction': direction.tolist()})
+    
 app.run(debug=True)
