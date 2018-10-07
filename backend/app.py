@@ -104,10 +104,10 @@ def update_user():
     allowed_keys = [x.split('.') for x in flatten([['dob'], ['name.%s' % n for n in ['first', 'last']],
         ['preferences.%s' % p for p in ['currency', 'timeZone']]])]
     request.data = clean_json(allowed_keys, json.loads(request.data), user)
-    if 'dob' in request.data: 
+    if 'dob' in request.data:
         request.data['dob'] = str(parser.parse(request.data['dob']))
     users.update_one({'_id': uid}, {'$set': request.data})
-    return jsonify({"message": "lit"}), 200
+    return jsonify(request.data), 200
 
 @app.route('/transactions', methods=['GET'])
 def get_transactions():
