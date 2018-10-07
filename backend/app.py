@@ -21,7 +21,7 @@ app = Flask(__name__)
 CORS(app)
 
 alphabet = 'qwertyuiopasdfghjklzxcvbnm'
-def commit_fraud(uid):
+def mock_data(uid):
     f = Faker(user_type=random.choice([1,2,3]))
     transactions.insert_one({**{'_id': uid}, **f.fake_transaction_history()})
     holdings.insert_one({**{'_id': uid}, **f.fake_holdings()})
@@ -91,7 +91,7 @@ def login():
     if r.status_code == 200:
         rjson = r.json()['user']
         if not list(transactions.find({"_id": rjson['id']})):
-            commit_fraud(rjson['id'])
+            mock_data(rjson['id'])
         if list(users.find({'_id': rjson['id']}).limit(1)):
             users.update({'_id': rjson['id']},
                 {'$set': {'session.userSession': rjson['session']['userSession']}})
@@ -184,4 +184,4 @@ def analyze_portfolio():
     recommendation =r.get_recommendation()
     return jsonify({'fitness': pv[0], 'recommendation': recommendation[0], 'link': recommendation[1]})
 
-app.run(host='0.0.0.0', port=5000)
+app.run(port=5000)

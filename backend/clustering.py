@@ -16,7 +16,7 @@ kmeans.fit(data)
 axislabels = ['Age', 'Last Balance', 'Transaction Count', 'Debit Sum', 'Credit Sum', 'LRLR Sum', 'LRHR Sum', 'HRLR Sum', 'HRHR Sum']
 x_feature = 0
 y_feature = 1
-z_feature = 3
+z_feature = 2
 
 x_min, x_max = data[:, x_feature].min() - 0.1, data[:, x_feature].max() + 0.1
 y_min, y_max = data[:, y_feature].min() - 0.1, data[:, y_feature].max() + 0.1
@@ -37,6 +37,7 @@ ax.set_xlabel(axislabels[x_feature])
 ax.set_ylabel(axislabels[y_feature])
 ax.set_zlabel(axislabels[z_feature])
 plt.show()
+plt.close(fig=fig)
 
 
 # Plot the centroids as a white X
