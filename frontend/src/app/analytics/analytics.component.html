@@ -1,3 +1,12 @@
-<p>
-  analytics works!
-</p>
+<ngx-charts-gauge
+      [view]="view"
+      [scheme]="colorScheme"
+      [results]="data"
+      [min]="0"
+      [max]="100"
+      [angleSpan]="240"
+      [startAngle]="-120"
+      [units]="'alerts'"
+      [bigSegments]="4"
+      (select)="onSelect($event)">
+    </ngx-charts-gauge>

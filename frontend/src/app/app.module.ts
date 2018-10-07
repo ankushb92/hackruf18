@@ -13,6 +13,7 @@ import { WellnessComponent } from './wellness/wellness.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
 import { HistoryComponent } from './history/history.component';
 import { HomeComponent } from './home/home.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,7 @@ import { HomeComponent } from './home/home.component';
     MatNativeDateModule,
     MatDividerModule,
     MatChipsModule,
-
+    NgxChartsModule,
     MatExpansionModule
   ],
   providers: [],
