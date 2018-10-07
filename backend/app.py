@@ -124,6 +124,9 @@ def get_transactions():
         transaction_results = list(transactions.find({'_id': uid},
             {'transaction': 1, '_id': 0}).limit(1))[0]
         transaction_results['transaction'] = list(reversed(transaction_results['transaction']))
+        if 'tnonly' in request.args:
+            transaction_results['transaction'] = [{'p': t['amount']['amount'], 'tt': t['date']} \
+                for t in transaction_results['transaction']]
         return jsonify(transaction_results), 200
     except IndexError:
         return jsonify({"message": "Invalid user session"}), 400
@@ -134,6 +137,8 @@ def get_holdings():
     try:
         uid = list(users.find({'session.userSession': session}, {'_id': 1}))[0]['_id']
         holding_data = list(holdings.find({'_id': uid}, {'holding': 1, '_id': 0}).limit(1))[0]
+        if 'tnonly' in request.args:
+            holding_data['holding'] = [{'p': h['price']['amount'], 'q': h['quantity'], 't': h['securityType']} for h in holding_data['holding']]
         return jsonify(holding_data)
     except IndexError:
         return jsonify({"message": "Invalid user session token"}), 400
