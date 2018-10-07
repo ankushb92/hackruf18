@@ -14,21 +14,11 @@ banks = [
     'BNY Mellon',
 ]
 
-instruments = [
-    'AMGGF',
-    'QTT',
-    'GE',
-    'TREE',
-    'GOLD',
-    'NAT. GAS',
-    'QSDBI US DIV IDX',
-    'MSCI USA IDX',
-    'RUSSEL 3000 IDX',
-    'S&P 1500 IDX',
-    'SOYBEAN',
-    'COAL'
-]
-    
+caps = 'QWERTYUIOPASDFGHJKLZXCVBNM'
+def get_rand_instrument_name(): 
+    name = ''.join([random.choice(caps) for _ in range(random.randint(3, 5))])
+    type_ = random.choice(['STOCK', 'IDX'])
+    return '%s %s' % (name, type_)
 
 class Faker:
 
@@ -130,7 +120,7 @@ class Faker:
             holding_quantity = np.random.normal(loc=50, scale=20)
             new_holding['costBasis']['amount'] = holding_amount
             new_holding['price']['amount'] = holding_amount
-            new_holding['description'] = random.choice(instruments)
+            new_holding['description'] = get_rand_instrument_name()
             new_holding['quantity'] = holding_quantity
             new_holding['value']['amount'] = holding_quantity * holding_amount
             new_holding['assetClassification'][0]['classificationValue'] = holding_type
