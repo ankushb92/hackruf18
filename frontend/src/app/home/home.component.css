@@ -11,3 +11,7 @@ display:flex;
 .small-font{
     font-size: 0.8em;
 }
+.flexer{
+    display:flex;
+}
+

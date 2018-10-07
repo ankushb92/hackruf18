@@ -1,14 +1,15 @@
-here
+<mat-divider>Holdings</mat-divider>
 <div class="body" *ngFor="let element of array">
-    <mat-card>
-        <div class="card-row">
-            {{element['description']}}
-            <span class="fill-remaining-space"></span>
-            {{element['quantity']}}
-        </div>
-
-        <div class="card-row small-font">
-            {{element['quantity']}} holdings at ${{element['price']['amount']}} per holding = ${{element['value']['amount']}}
-        </div>
-    </mat-card>
+    <mat-expansion-panel [hideToggle]="true">
+      <mat-expansion-panel-header class="flexer">
+        <mat-panel-title>
+          {{element['description']}}
+        </mat-panel-title>
+        <span class="fill-remaining-space"></span>
+          <mat-chip-list>
+              <mat-chip color="primary" selected>{{element['quantity'] | number: '1.0-0'}}</mat-chip>
+            </mat-chip-list>
+      </mat-expansion-panel-header>
+      random text_here
+    </mat-expansion-panel>
 </div>
