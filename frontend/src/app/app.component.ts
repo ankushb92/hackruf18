@@ -37,6 +37,7 @@ export class AppComponent implements OnInit{
 
   showProfile() {
     this.profile = true;
+    console.log(this.user);
   }
 
   hideProfile() {

@@ -14,6 +14,12 @@ banks = [
     'BNY Mellon',
 ]
 
+caps = 'QWERTYUIOPASDFGHJKLZXCVBNM'
+def get_rand_instrument_name(): 
+    name = ''.join([random.choice(caps) for _ in range(random.randint(3, 5))])
+    type_ = random.choice(['STOCK', 'IDX'])
+    return '%s %s' % (name, type_)
+
 class Faker:
 
     def __init__(self, user_type=1):
@@ -114,6 +120,7 @@ class Faker:
             holding_quantity = np.random.normal(loc=50, scale=20)
             new_holding['costBasis']['amount'] = holding_amount
             new_holding['price']['amount'] = holding_amount
+            new_holding['description'] = get_rand_instrument_name()
             new_holding['quantity'] = holding_quantity
             new_holding['value']['amount'] = holding_quantity * holding_amount
             new_holding['assetClassification'][0]['classificationValue'] = holding_type
