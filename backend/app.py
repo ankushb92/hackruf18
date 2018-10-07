@@ -16,11 +16,8 @@ holdings = db['holdings']
 app = Flask(__name__)
 CORS(app)
 
-def commit_fraud(uid, tcount=0, hcount=0):
-    print("Committing Fraud")
-    tcount = tcount if tcount > 0 else random.randint(30, 100)
-    hcount = hcount if hcount > 0 else random.randint(5, 50)
-    f = Faker(tcount, hcount)
+def commit_fraud(uid):
+    f = Faker()
     transactions.insert_one({**{'_id': uid}, **f.fake_transaction_history()})
     holdings.insert_one({**{'_id': uid}, **f.fake_holdings()})
     
@@ -31,10 +28,43 @@ DEFAULT_HEADERS = {
     "Content-Type": "application/json"
 }
 
+def flatten(l):
+    return [i for s in l for i in s]
+
 def include_session(s):
     auth_header = {'Authorization':  "{cobSession=%s,userSession=%s}" % (config['session']['cobSession'], s)}
     return {**DEFAULT_HEADERS, **auth_header}
 
+def get_id_from_session(session):
+    try:
+        uid = list(users.find({'session.userSession': session}, {'_id': 1}))[0]['_id']
+        return uid
+    except IndexError:
+        return None
+
+def clean_json(allowed_keys, update_data, original_data):
+    print(allowed_keys, update_data, original_data)
+    def w(klist, data):
+        for k in klist:
+            data = data[k]
+        return data
+            
+    for klist in allowed_keys:
+        try:
+            subobj = original_data
+            for i, key in enumerate(klist):
+                if i == (len(klist)-1):
+                    subobj[key] = w(klist, update_data)
+                elif key not in subobj:
+                    subobj[key] = {}
+                subobj = subobj[key]
+
+        except KeyError:
+            print("BAD KLIST", klist)
+            continue
+    return original_data
+
+        
 @app.route('/ping')
 def pong():
     return jsonify({'message': 'Pong'})
@@ -64,6 +94,17 @@ def login():
         users.insert_one(rjson)
         return jsonify(rjson)
 
+@app.route('/user/update', methods=['PUT'])
+def update_user():
+    uid = get_id_from_session(request.headers.get('session'))
+    if not uid:
+        return jsonify({"message": "bad user session token"}), 400
+    user = list(users.find({'_id': uid}).limit(1))[0]
+    allowed_keys = [x.split('.') for x in flatten([['age'], ['name.%s' % n for n in ['first', 'last']],
+        ['preferences.%s' % p for p in ['currency', 'timeZone', 'dateFormat', 'locale']]])]
+    request.data = clean_json(allowed_keys, json.loads(request.data), user)
+    return jsonify(request.data)
+
 @app.route('/transactions', methods=['GET'])
 def get_transactions():
     session = request.headers.get("session")
@@ -85,7 +126,6 @@ def get_holdings():
 @app.route('/logout', methods=['POST'])
 def logout():
     usersession = request.headers.get('session')
-    print("HEADERS", include_session(usersession))
     r = req.post('https://developer.api.yodlee.com:443/ysl/user/logout',
         headers=include_session(usersession))
     if r.status_code == 204:
