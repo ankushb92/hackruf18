@@ -1,0 +1,10 @@
+.body div {
+    display: flex;
+    flex-flow: column; }
+
+.full-width {
+    margin: 10px; }
+
+.mat-button {
+    background: '#c131ed';
+    color: white; }
