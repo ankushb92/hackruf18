@@ -13,9 +13,9 @@ with open('tocluster') as fo:
 kmeans = KMeans(init='k-means++', n_clusters=3, n_init=10)
 kmeans.fit(data)
 
-labels = ['Age', 'Last Balance', 'Transaction Count', 'Debit Sum', 'Credit Sum', 'Lrlr Sum', 'Lrhr Sum', 'Hrlr Sum', 'Hrhr Sum']
-x_feature = 1
-y_feature = 2
+axislabels = ['Age', 'Last Balance', 'Transaction Count', 'Debit Sum', 'Credit Sum', 'LRLR Sum', 'LRHR Sum', 'HRLR Sum', 'HRHR Sum']
+x_feature = 0
+y_feature = 1
 z_feature = 3
 
 x_min, x_max = data[:, x_feature].min() - 0.1, data[:, x_feature].max() + 0.1
@@ -33,9 +33,9 @@ ax = fig.add_subplot(111, projection='3d')
 for i, group in enumerate(groups):
     xs, ys, zs = list(zip(*group))
     ax.scatter(xs, ys, zs, c=colors[i], marker='o')
-ax.set_xlabel(labels[x_feature])
-ax.set_ylabel(labels[y_feature])
-ax.set_zlabel(labels[z_feature])
+ax.set_xlabel(axislabels[x_feature])
+ax.set_ylabel(axislabels[y_feature])
+ax.set_zlabel(axislabels[z_feature])
 plt.show()
 
 
