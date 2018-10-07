@@ -14,7 +14,6 @@ export class HomeComponent implements OnInit {
       this.session = localStorage.getItem('session');
       this.service.get_holdings(this.session).subscribe((data)=> {
       this.array = data['holding'];
-      console.log(data);
       });
   }
 
