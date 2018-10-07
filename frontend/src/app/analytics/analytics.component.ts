@@ -50,7 +50,7 @@ export class AnalyticsComponent implements OnInit {
 
     this.service.get_hold(this.session).subscribe((data)=>{
       data['holding'].forEach((e) => {
-        this.data2.push({value: e['sum'], name: e['index']});
+        this.data2.push({value: e['sum'], name: e['idx']});
 
       });
       this.multi2 = [{name: 'hist', series:this.data2}];

@@ -29,6 +29,7 @@ export class WellnessComponent implements OnInit {
         this.session = localStorage.getItem("session");
         this.service.get_wellness(this.session).subscribe((data) => {
             this.data = data;
+            console.log(data);
             this.fitness = [{
               "name": "Fitness",
               "value": Math.round(this.data['fitness'] * 100)
