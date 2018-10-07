@@ -14,4 +14,6 @@ display:flex;
 .flexer{
     display:flex;
 }
-
+.left-space{
+margin-left:10px;
+}

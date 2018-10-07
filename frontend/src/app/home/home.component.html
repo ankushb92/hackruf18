@@ -2,13 +2,14 @@
 <div class="body" *ngFor="let element of array">
     <mat-expansion-panel [hideToggle]="true">
       <mat-expansion-panel-header class="flexer">
-        <mat-panel-title>
-          {{element['description']}}
-        </mat-panel-title>
-        <span class="fill-remaining-space"></span>
-          <mat-chip-list>
+      {{element['description']}}
+          <mat-chip-list class="left-space">
               <mat-chip color="primary" selected>{{element['quantity'] | number: '1.0-0'}}</mat-chip>
-            </mat-chip-list>
+            </mat-chip-list> 
+        <span class="fill-remaining-space"></span>
+        <mat-chip-list>
+          <mat-chip color="accent" selected>${{element['price']['amount'] | number: '1.2-2'}}</mat-chip>
+        </mat-chip-list>
       </mat-expansion-panel-header>
       random text_here
     </mat-expansion-panel>
