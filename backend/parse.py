@@ -1,3 +1,4 @@
+
 import random
 import json
 import numpy as np
@@ -68,7 +69,9 @@ if __name__ == '__main__':
     age = None
 
     f_cluster = open('tocluster', 'w')
-    f_nn = open('nn_training', 'w')
+    f_nn1 = open('nn1_training', 'w')
+    f_nn2 = open('nn2_training', 'w')
+    f_nn3 = open('nn3_training', 'w')
 
     for line in fo:
         i += 1
@@ -81,7 +84,7 @@ if __name__ == '__main__':
             f_cluster.write(json.dumps(parser.get_k_means_attrs())+'\n')
             nn_attrs = parser.get_neural_net_attrs()
             prob = nn_train_prob(np.linalg.norm(np.array(nn_attrs) - np.array([1.45519152e-10, 2.91038305e-10, 3.39448958e+04, 5.46197439e+05])))
-            f_nn.write(str(nn_attrs+[prob])+'\n')
+            f_nn1.write(str(nn_attrs+[prob])+'\n')
 
     fo = open('2.json')
     i = 0
@@ -99,8 +102,7 @@ if __name__ == '__main__':
             f_cluster.write(json.dumps(parser.get_k_means_attrs())+'\n')
             nn_attrs = parser.get_neural_net_attrs()
             prob = nn_train_prob(np.linalg.norm(np.array(nn_attrs) - np.array([1.45519152e-10, 5.54463897e+05, 6.12790794e+04, -1.74622983e-10])))
-            f_nn.write(str(nn_attrs+[prob])+'\n')            
-            # parser.get_neural_net_attrs()
+            f_nn2.write(str(nn_attrs+[prob])+'\n')
 
 
     fo = open('3.json')
@@ -119,10 +121,10 @@ if __name__ == '__main__':
             f_cluster.write(json.dumps(parser.get_k_means_attrs())+'\n')
             nn_attrs = parser.get_neural_net_attrs()
             prob = nn_train_prob(np.linalg.norm(np.array(nn_attrs) - np.array([6.76717678e+05, 2.91038305e-10, 2.18278728e-11, -1.74622983e-10])))
-            f_nn.write(str(nn_attrs+[prob])+'\n')
-            # parser.get_neural_net_attrs()
+            f_nn3.write(str(nn_attrs+[prob])+'\n')
 
     f_cluster.close()
-    f_nn.close()
-
+    f_nn1.close()
+    f_nn2.close()
+    f_nn3.close()
 
