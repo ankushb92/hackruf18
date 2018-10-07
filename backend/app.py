@@ -173,6 +173,7 @@ def analyze_portfolio():
         list(holdings.find({'_id': uid}, {'holding': 1, '_id': 0}))[0], 25)
     pv, direction = predict(p.get_neural_net_attrs(), train())
     r = Recommender(direction.tolist())
-    return jsonify({'fitness': pv[0], 'recommendation': r.get_recommendation()})
+    recommendation =r.get_recommendation()
+    return jsonify({'fitness': pv[0], 'recommendation': recommendation[0], 'link': recommendation[1]})
 
 app.run(debug=True)

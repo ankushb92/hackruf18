@@ -9,6 +9,7 @@ import {WellnessService} from "./../wellness.service";
 
 export class WellnessComponent implements OnInit {
     session: string = null;
+    data: any = null;
 
     constructor(public service: WellnessService) { }
     ngOnInit() {

@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { single } from './data';
 @Component({
   selector: 'app-analytics',
   templateUrl: './analytics.component.html',
   styleUrls: ['./analytics.component.css']
 })
 export class AnalyticsComponent implements OnInit {
-view: any[] = [window.innerWidth , 400];
+  view: any[] = [window.innerWidth , 400];
   data: any[];
   
   constructor() {
-    this.data = single;
+    this.data = [];
   }
   
   colorScheme = {
