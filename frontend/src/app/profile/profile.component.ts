@@ -23,6 +23,8 @@ export class ProfileComponent implements OnInit {
     this.service.updateUserProfile(this.user, this.session).subscribe(
         (data) => {
             console.log(data);
+            this.userChange.emit(this.user);
+            localStorage.setItem('user', JSON.stringify('user'));
         }
     )
   }
