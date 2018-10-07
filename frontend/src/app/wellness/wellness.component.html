@@ -1,3 +1,17 @@
+<ngx-charts-gauge style="display: block"
+  [view]="view"
+  [scheme]="colorScheme"
+  [results]="data"
+  [min]="0"
+  [max]="100"
+  [angleSpan]="240"
+  [startAngle]="-120"
+  [units]="'alerts'"
+  [bigSegments]="4"
+  (select)="onSelect($event)">
+</ngx-charts-gauge>
+
+
 <p>
-    {{data['recommendation']}}
+    {{ data['recommendation'] }}
 </p>
