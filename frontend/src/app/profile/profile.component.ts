@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import {ProfileService} from "../profile.service";
-import {MatSnackBar} from "@angular/material";
+
 
 @Component({
   selector: 'app-profile',
@@ -9,19 +9,19 @@ import {MatSnackBar} from "@angular/material";
 })
 
 export class ProfileComponent implements OnInit {
-  @Input() firstName: string;
-  @Input() lastName: string;
-  @Input() age: string;
-  @Input() currency: string;
-  @Input() timezone: string;
-  @Input() userProfileChange: EventEmitter<string> = new EventEmitter<string>();
-  constructor(public service: ProfileService, public snackBar: MatSnackBar) { }
+
+  @Output() userChange: EventEmitter<object> = new EventEmitter<object>();
+  constructor(public service: ProfileService) { }
+  @Input() user: object;
+
 
   ngOnInit() {
+    console.log(JSON.stringify(this.user));
   }
 
   updateUserProfile() {
-    this.service.updateUser(this.first, this.last, this.age, this.currency, this.timezone).subscribe(
+    this.service.updateUser(this.user['name']['first'], this.user['name']['last'],
+    this.user['age'], this.user['preferences']['currency'], this.user['preferences']['timeZone']).subscribe(
         (data) => {
             console.log(data);
         }

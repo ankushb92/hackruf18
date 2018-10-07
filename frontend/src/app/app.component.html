@@ -1,7 +1,7 @@
 <!--The content below is only a placeholder and can be replaced.-->
 
 <mat-toolbar color="primary">
-  <button mat-button  *ngIf="profile" class="menu_icon"
+  <button mat-button  *ngIf="loggedIn && profile" class="menu_icon"
           (click)="hideProfile()"><mat-icon>arrow_back_ios</mat-icon></button>
   <span>My Application</span>
 
@@ -21,5 +21,5 @@
                [(loggedIn)]="loggedIn" [(user)]="user"></app-login>
     <app-root *ngIf="loggedIn && !profile" [(userSession)]="userSession"
               [(user)]="user"></app-root>
-    <app-profile *ngIf="loggedIn && profile"></app-profile>
+    <app-profile *ngIf="loggedIn && profile" [(user)]="user"></app-profile>
 </div>
