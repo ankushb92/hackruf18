@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
       (data) => {
 
         console.log(data);
-        this.snackBar.open('Welcome ' + data['name']['first'] + ' ' + data['name']['last']);
+        this.snackBar.open('Welcome ' + data['name']['first'] + ' ' + data['name']['last'], '', {duration: 3000} );
         this.userSession = data['session']['userSession'];
         this.loggedIn = true;
         localStorage.setItem('session', this.userSession);
@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
         console.log(this.loggedIn);
       },
       (error) => {
-        this.snackBar.open('Unsuccessful login' );
+        this.snackBar.open('Unsuccessful login', '', {duration: 3000} );
       }
 
     )
