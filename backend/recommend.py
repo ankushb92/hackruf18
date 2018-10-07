@@ -16,7 +16,7 @@ class Recommender:
     def get_recommendation_ordinal(self):
         for i in range(self.dimensions):
             self.difference_vector[i] = abs(self.difference_vector[i])
-        pair_vectors = zip(self.difference_vector, self.attributes)
+        pair_vectors = list(zip(self.difference_vector, self.attributes))
         pair_vectors.sort(reverse=True)
         self.pair_vectors = pair_vectors
 

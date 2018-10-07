@@ -8,6 +8,7 @@ import random
 from flask_cors import CORS
 from fake import Faker
 from parse import Parser
+from recommend import Recommender
 from neural_net import predict, train
 
 client = MongoClient('mongodb://localhost:27017')
@@ -166,6 +167,7 @@ def analyze_portfolio():
     p = Parser(list(transactions.find({'_id': uid}, {'transaction': 1, '_id': 0}))[0],
         list(holdings.find({'_id': uid}, {'holding': 1, '_id': 0}))[0], 25)
     pv, direction = predict(p.get_neural_net_attrs(), train())
-    return jsonify({'fitness': pv[0], 'direction': direction.tolist()})
-    
+    r = Recommender(direction.tolist())
+    return jsonify({'fitness': pv[0], 'recommendation': r.get_recommendation()})
+
 app.run(debug=True)

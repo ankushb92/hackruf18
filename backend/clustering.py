@@ -13,6 +13,7 @@ with open('tocluster') as fo:
 kmeans = KMeans(init='k-means++', n_clusters=3, n_init=10)
 kmeans.fit(data)
 
+labels = ['Age', 'Last Balance', 'Transaction Count', 'Debit Sum', 'Credit Sum', 'Lrlr Sum', 'Lrhr Sum', 'Hrlr Sum', 'Hrhr Sum']
 x_feature = 1
 y_feature = 2
 z_feature = 3
@@ -22,16 +23,19 @@ y_min, y_max = data[:, y_feature].min() - 0.1, data[:, y_feature].max() + 0.1
 z_min, z_max = data[:, z_feature].min() - 0.1, data[:, z_feature].max() + 0.1
 points = list(zip(data[:, x_feature], data[:, y_feature], data[:, z_feature]))
 labels = kmeans.labels_
-clf = svm.LinearSVC(C=1).fit(points, labels)
+groups = [[] for _ in range(max(labels)+1)]
+for p,l in zip(points, labels):
+    groups[l].append(p)
+
+colors = ['r', 'g', 'b']
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
-ax.scatter(data[:, x_feature], data[:, y_feature], data[:, z_feature], c='r', marker='o')
-ax.set_xlabel("Last Balance")
-ax.set_ylabel("Transaction Count")
-ax.set_zlabel("Debit Sum")
-coeffs = clf.coef_
-print(clf.intercept_)
-ax.plot_surface([coeffs[0]], [coeffs[1]], [coeffs[2]])
+for i, group in enumerate(groups):
+    xs, ys, zs = list(zip(*group))
+    ax.scatter(xs, ys, zs, c=colors[i], marker='o')
+ax.set_xlabel(labels[x_feature])
+ax.set_ylabel(labels[y_feature])
+ax.set_zlabel(labels[z_feature])
 plt.show()
 
 
