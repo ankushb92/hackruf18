@@ -110,7 +110,10 @@ def get_transactions():
     session = request.headers.get("session")
     try:
         uid = list(users.find({'session.userSession': session}, {'_id': 1}))[0]['_id']
-        return jsonify(list(transactions.find({'_id': uid}, {'transaction': 1, '_id': 0}).limit(1))[0])
+        transaction_results = list(transactions.find({'_id': uid},
+            {'transaction': 1, '_id': 0}).limit(1))[0]
+        transaction_results['transaction'] = list(reversed(transaction_results['transaction']))
+        return jsonify(transaction_results), 200
     except IndexError:
         return jsonify({"message": "Invalid user session"}), 400
 
@@ -120,6 +123,16 @@ def get_holdings():
     try:
         uid = list(users.find({'session.userSession': session}, {'_id': 1}))[0]['_id']
         return jsonify(list(transactions.find({'_id': uid}, {'holding': 1, '_id': 0}).limit(1))[0])
+    except IndexError:
+        return jsonify({"message": "Invalid user session token"}), 400
+
+@app.route('/accounts', methods=['GET'])
+def get_accounts():
+    session = request.headers.get('session')
+    try:
+        if len(list(users.find({'session.userSession': session}, {'_id': 1}))) > 0:
+            r = req.get('https://developer.api.yodlee.com:443/ysl/accounts', headers=include_session(session))
+            return jsonify(r.json()), 200
     except IndexError:
         return jsonify({"message": "Invalid user session token"}), 400
 
