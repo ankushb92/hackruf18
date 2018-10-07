@@ -5,5 +5,6 @@ export class consts {
   public static HISTORY_URL = consts.BASE_URL + '/transactions';
   public static HOLDING_URL = consts.BASE_URL + '/holdings';
   public static UPDATE_PROFILE_URL = consts.BASE_URL + '/user/update';
+  public static ACCOUNT_URL = consts.BASE_URL + '/accounts';
 }
 

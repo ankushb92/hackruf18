@@ -1,4 +1,31 @@
+<div class="body">
+  <mat-accordion>
+
+    <mat-expansion-panel [hideToggle]="true">
+      <mat-expansion-panel-header >
+        Bank of America <span class="fill-remaining-space"></span>
+        <span class="big-size">$1000</span>
+      </mat-expansion-panel-header>
+
+      This the expansion 1 content
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        Chase
+      </mat-expansion-panel-header>
+
+      This the expansion 2 content
+
+    </mat-expansion-panel>
+
+  </mat-accordion>
+</div>
+
+
 <mat-divider>Holdings</mat-divider>
+
 <div class="body" *ngFor="let element of array">
     <mat-expansion-panel [hideToggle]="true">
       <mat-expansion-panel-header class="flexer">

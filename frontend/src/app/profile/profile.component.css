@@ -4,11 +4,19 @@
     height: 100%; }
 
 .body {
-    overflow-y: hidden; }
+    overflow-y: hidden;
+  margin: 0 15px;
+  padding-top: 15px;
+}
 
 .full-width {
     margin: 10px; }
 
-.mat-button {
-    background: '#c131ed';
-    color: white; }
+
+.person {
+  font-size: 10em;
+  height: auto;
+  width: auto;
+  display: flex;
+  margin: 0 auto;
+}
