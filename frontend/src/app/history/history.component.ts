@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {HistoryService} from "./../history.service"
 
 @Component({
   selector: 'app-history',
@@ -6,10 +7,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./history.component.css']
 })
 export class HistoryComponent implements OnInit {
-
-  constructor() { }
-
+  session: string = null;
+  constructor(public service: HistoryService) { }
+  array = []
   ngOnInit() {
+      this.session = localStorage.getItem('session');
+      this.service.get_history(this.session).subscribe((data)=> {
+      this.array = data['transaction'];
+      });
   }
+
+
 
 }
