@@ -1,14 +1,37 @@
-<h5 style="margin:15px">YOUR WELLNESS SCORE</h5>
+<h5 style="margin:15px">Transactions over time</h5>
 
-<ngx-charts-gauge style="display: block"
-                  [view]="view"
-                  [scheme]="colorScheme"
-                  [results]="fitness"
-                  [min]="0"
-                  [max]="100"
-                  [angleSpan]="240"
-                  [startAngle]="-120"
-                  [units]="'Points'"
-                  [bigSegments]="4"
-                  (select)="onSelect($event)">
-</ngx-charts-gauge>
+<ngx-charts-line-chart style="margin: 15px;"
+  [view]="view"
+  [scheme]="colorScheme"
+  [results]="multi"
+  [gradient]="gradient"
+  [xAxis]="showXAxis"
+  [yAxis]="showYAxis"
+  [legend]="showLegend"
+  [showXAxisLabel]="showXAxisLabel"
+  [showYAxisLabel]="showYAxisLabel"
+  [xAxisLabel]="xAxisLabel"
+  [yAxisLabel]="yAxisLabel"
+  [autoScale]="autoScale"
+  (select)="onSelect($event)">
+</ngx-charts-line-chart>
+
+<mat-divider></mat-divider>
+
+<h5 style="margin:15px">How well are your holdings doing?</h5>
+
+<ngx-charts-line-chart style="margin: 15px;"
+                       [view]="view"
+                       [scheme]="colorScheme"
+                       [results]="multi2"
+                       [gradient]="gradient"
+                       [xAxis]="showXAxis"
+                       [yAxis]="showYAxis"
+                       [legend]="showLegend"
+                       [showXAxisLabel]="showXAxisLabel"
+                       [showYAxisLabel]="showYAxisLabel"
+                       [xAxisLabel]="xAxisLabel"
+                       [yAxisLabel]="yAxisLabel"
+                       [autoScale]="autoScale"
+                       (select)="onSelect($event)">
+</ngx-charts-line-chart>
