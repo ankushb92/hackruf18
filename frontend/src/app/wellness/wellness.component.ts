@@ -14,9 +14,9 @@ export class WellnessComponent implements OnInit {
 
 
   view: any[] = [window.innerWidth , 400];
-
-  colorScheme = {
-    domain: ['#5AA454'],
+    fitness: any = null;
+    colorScheme = {
+    domain: ['#7b1fa2'],
     text: ['#fff']
   };
 
@@ -29,7 +29,10 @@ export class WellnessComponent implements OnInit {
         this.session = localStorage.getItem("session");
         this.service.get_wellness(this.session).subscribe((data) => {
             this.data = data;
-            console.log(data);
+            this.fitness = [{
+              "name": "Fitness",
+              "value": Math.round(this.data['fitness'] * 100)
+            }];
         });
     }
 
