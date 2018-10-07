@@ -107,7 +107,7 @@ def update_user():
     if 'dob' in request.data: 
         request.data['dob'] = str(parser.parse(request.data['dob']))
     users.update_one({'_id': uid}, {'$set': request.data})
-    return {"message": "lit"}, 200
+    return jsonify({"message": "lit"}), 200
 
 @app.route('/transactions', methods=['GET'])
 def get_transactions():
