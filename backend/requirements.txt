@@ -9,7 +9,7 @@ graphql-core==2.1
 graphql-relay==0.4.5
 idna==2.7
 itsdangerous==0.24
-Jinja2==2.10
+Jinja2==2.11.3
 MarkupSafe==1.0
 numpy==1.15.2
 promise==2.2.1
